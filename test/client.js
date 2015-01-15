@@ -148,7 +148,7 @@ describe('client.authenticate', function () {
       apiKey: 'deadbeefdeadbeefdeadbeefdeadbeef'
     }, function (err) {
       scope.done();
-      expect(err.message).to.match(/\[simple\-keystone\-client:malformed\]/);
+      expect(err.message).to.match(/^\[simple\-keystone\-client:malformed\]/);
       done();
     });
   });
