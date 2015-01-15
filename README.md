@@ -1,4 +1,6 @@
-# simple-keystone-client
+simple-keystone-client ![](https://travis-ci.org/ksheedlo/simple-keystone-client.svg?branch=master)
+======================
+
 
 This library provides the minimal useful Keystone identity client in a small, clean, well-tested package.
 
