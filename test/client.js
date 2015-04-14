@@ -105,6 +105,48 @@ describe('client.authenticate', function () {
     });
   });
 
+  it('sends the tenantName if present', function (done) {
+    var scope;
+
+    scope = nock('https://identity.api.rackspacecloud.com')
+      .post('/v2.0/tokens', {
+        auth: {
+          'RAX-KSKEY:apiKeyCredentials': {
+            username: 'test.user',
+            apiKey: 'deadbeefdeadbeefdeadbeefdeadbeef'
+          },
+          tenantName: 'foobar'
+        }
+      })
+      .reply(200, { access: { token: 'WOOO!' } });
+
+    client.authenticate({
+      username: 'test.user',
+      apiKey: 'deadbeefdeadbeefdeadbeefdeadbeef',
+      tenantName: 'foobar'
+    }, function (err) {
+      if (err) {
+        return done(err);
+      }
+      scope.done();
+      done();
+    });
+  });
+
+  it('throws an error when both tenant id and tenant name are supplied',
+    function () {
+      expect(function () {
+        client.authenticate({
+        username: 'test.user',
+        apiKey: 'deadbeefdeadbeefdeadbeefdeadbeef',
+        tenantName: 'foobar',
+        tenantId: '123456'
+      }, noop);
+      }).to.throw('[simple-keystone-client:badoptions] TenantName' +
+        'and tenantId cannot be specified together.');
+    }
+  );
+
   it('propagates authentication failures', function (done) {
     var scope = nock('https://identity.api.rackspacecloud.com')
       .post('/v2.0/tokens')
